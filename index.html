@@ -3,59 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SousLoc - Partage d'abonnements</title>
+    <title>SousLoc - Vos abonnements moins chers</title>
+    <!-- Importation de la police Google Poppins pour un look moderne et sympa -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; }
-        header { text-align: center; margin-bottom: 40px; }
-        h1 { color: #ff4757; font-size: 3em; margin-bottom: 5px; }
-        .subtitle { color: #747d8c; font-size: 1.2em; }
-        #abonnements { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
-        .card { background: white; border-radius: 12px; padding: 20px; width: 250px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center; border-top: 4px solid #ff4757; }
-        .service-name { font-size: 22px; font-weight: bold; color: #2f3542; margin-bottom: 10px; }
-        .places { background-color: #eccc68; color: #2f3542; padding: 5px 10px; border-radius: 20px; font-size: 14px; font-weight: bold; display: inline-block; margin-bottom: 15px; }
-        .price { font-size: 28px; color: #2ed573; font-weight: bold; margin-bottom: 20px; }
-        .btn { background-color: #ff4757; color: white; border: none; padding: 12px 20px; border-radius: 8px; width: 100%; font-size: 16px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .btn:hover { background-color: #ff6b81; }
+        :root {
+            --primary: #6c5ce7; /* Violet fun */
+            --secondary: #ff7675; /* Corail / Rose */
+            --success: #00b894; /* Vert menthe pour l'argent */
+            --bg: #f5f6fa;
+            --text: #2d3436;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: var(--bg); color: var(--text); padding-bottom: 50px; }
+
+        /* EN-TÊTE COLORÉ */
+        header {
+            background: linear-gradient(135deg, var(--primary), #a29bfe);
+            color: white;
+            text-align: center;
+            padding: 60px 20px 40px;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.2);
+        }
+        h1 { font-size: 3.5em; font-weight: 800; margin-bottom: 10px; letter-spacing: -1px; }
+        .subtitle { font-size: 1.2em; opacity: 0.9; max-width: 600px; margin: 0 auto; line-height: 1.5; }
+
+        /* COMMENT ÇA MARCHE */
+        .how-it-works {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: -30px auto 40px;
+            padding: 0 20px;
+            flex-wrap: wrap;
+            max-width: 900px;
+        }
+        .step {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 0.9em;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .step-icon { font-size: 1.5em; }
+
+        /* GRILLE D'ABONNEMENTS */
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+        .section-title { font-size: 1.8em; margin-bottom: 20px; text-align: center; }
+        
+        #abonnements {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        /* DESIGN DES CARTES */
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 30px 25px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+        .card:hover { transform: translateY(-10px); }
+        
+        /* Petite touche visuelle en haut de la carte */
+        .card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px; background: var(--secondary);
+        }
+
+        .service-icon { font-size: 3.5em; margin-bottom: 15px; }
+        .service-name { font-size: 1.4em; font-weight: 800; margin-bottom: 15px; }
+        
+        .places {
+            background-color: #ffeaa7;
+            color: #d63031;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 800;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .price-box { margin-bottom: 25px; }
+        .price { font-size: 2.5em; color: var(--success); font-weight: 800; line-height: 1; }
+        .price-detail { font-size: 0.9em; color: #b2bec3; font-weight: 600; }
+
+        /* BOUTON D'ACTION */
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 16px 20px;
+            border-radius: 16px;
+            width: 100%;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+        }
+        .btn:hover { background: #5a4bcf; transform: scale(1.02); }
+        .btn:active { transform: scale(0.98); }
     </style>
 </head>
 <body>
 
+    <!-- L'EN-TÊTE -->
     <header>
-        <h1>🔑 SousLoc</h1>
-        <div class="subtitle">Ne payez plus plein pot. Divisez l'addition.</div>
+        <h1>✌️ SousLoc</h1>
+        <div class="subtitle">Ne payez plus vos abonnements plein pot. Squattez les places libres des autres et divisez l'addition.</div>
     </header>
 
-    <!-- C'est ici que les abonnements vont s'afficher -->
-    <div id="abonnements">
-        <p>Chargement des sous-locs disponibles...</p>
+    <!-- LES EXPLICATIONS -->
+    <div class="how-it-works">
+        <div class="step"><span class="step-icon">🔍</span> 1. Choisis ton abo</div>
+        <div class="step"><span class="step-icon">💳</span> 2. Paie ta part</div>
+        <div class="step"><span class="step-icon">🍿</span> 3. Profite direct</div>
+    </div>
+
+    <!-- LES OFFRES -->
+    <div class="container">
+        <h2 class="section-title">🔥 Les places dispo en ce moment</h2>
+        <div id="abonnements">
+            <p style="text-align:center; width: 100%; color: #666;">Recherche des sous-locs...</p>
+        </div>
     </div>
 
     <script>
-        // ⚠️ REMPLACE L'URL CI-DESSOUS PAR TON LIEN RENDER (ex: https://lasousloc-api-xyz.onrender.com)
-        const API_URL = 'https://TON_LIEN_RENDER/api/abonnements';
+        // ⚠️ N'OUBLIE PAS DE METTRE TON LIEN RENDER ICI !
+        const API_URL = 'https://lasousloc-api.onrender.com/api/abonnements';
 
-        // Cette fonction va chercher les données sur ton serveur
+        // Petite fonction pour attribuer un emoji selon le nom du service
+        function getIcon(serviceName) {
+            const name = serviceName.toLowerCase();
+            if(name.includes('apple')) return '🎵';
+            if(name.includes('netflix')) return '🍿';
+            if(name.includes('spotify')) return '🎧';
+            if(name.includes('playstation') || name.includes('xbox')) return '🎮';
+            return '✨';
+        }
+
+        // On va chercher les données sur ton serveur
         fetch(API_URL)
             .then(response => response.json())
             .then(data => {
                 const conteneur = document.getElementById('abonnements');
-                conteneur.innerHTML = ''; // On vide le texte de chargement
+                conteneur.innerHTML = '';
 
-                // On crée une carte pour chaque abonnement trouvé
                 data.forEach(abo => {
                     const card = document.createElement('div');
                     card.className = 'card';
                     card.innerHTML = `
+                        <div class="service-icon">${getIcon(abo.service)}</div>
                         <div class="service-name">${abo.service}</div>
                         <div class="places">${abo.places_dispos} place(s) dispo</div>
-                        <div class="price">${abo.prix_client.toFixed(2)} € <span style="font-size: 14px; color: #747d8c;">/ mois</span></div>
-                        <button class="btn" onclick="alert('Bientôt connecté à Stripe !')">Rejoindre la coloc</button>
+                        <div class="price-box">
+                            <div class="price">${abo.prix_client.toFixed(2).replace('.', ',')} €</div>
+                            <div class="price-detail">/ mois (sans engagement)</div>
+                        </div>
+                        <button class="btn" onclick="alert('Bientôt tu pourras t\\'abonner en vrai !')">Je prends la place 👋</button>
                     `;
                     conteneur.appendChild(card);
                 });
             })
             .catch(erreur => {
-                document.getElementById('abonnements').innerHTML = "<p>Erreur de connexion au serveur.</p>";
+                document.getElementById('abonnements').innerHTML = "<p style='text-align:center; width: 100%; color: red;'>Oops ! Impossible de contacter le serveur.</p>";
             });
     </script>
 </body>
