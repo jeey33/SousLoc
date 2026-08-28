@@ -11,36 +11,23 @@ const pool = new Pool({
     ssl: { rejectUnauthorized: false }
 });
 
+// MISE À JOUR DE LA BASE DE DONNÉES
 const initDB = async () => {
     try {
         await pool.query(`
             CREATE TABLE IF NOT EXISTS sl_users (
                 id SERIAL PRIMARY KEY,
+                prenom VARCHAR(100),
+                nom VARCHAR(100),
                 email VARCHAR(255) UNIQUE NOT NULL,
                 password_hash VARCHAR(255) NOT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
-
-            CREATE TABLE IF NOT EXISTS sl_subscriptions (
-                id SERIAL PRIMARY KEY,
-                service_name VARCHAR(100) NOT NULL,
-                total_slots INT NOT NULL,
-                available_slots INT NOT NULL,
-                price_per_slot DECIMAL(10,2) NOT NULL,
-                owner_id INT REFERENCES sl_users(id),
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            );
-
-            -- NOUVELLE TABLE : Les recherches des clients
-            CREATE TABLE IF NOT EXISTS sl_requests (
-                id SERIAL PRIMARY KEY,
-                service_name VARCHAR(100) NOT NULL,
-                user_id INT REFERENCES sl_users(id),
-                status VARCHAR(50) DEFAULT 'en_attente',
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            );
         `);
-        console.log("✅ Tables SousLoc à jour !");
+        // On force l'ajout des colonnes au cas où la table existait déjà avec l'ancien code
+        await pool.query(`ALTER TABLE sl_users ADD COLUMN IF NOT EXISTS prenom VARCHAR(100);`);
+        await pool.query(`ALTER TABLE sl_users ADD COLUMN IF NOT EXISTS nom VARCHAR(100);`);
+        console.log("✅ Tables SousLoc à jour avec Noms et Prénoms !");
     } catch (err) {
         console.error("❌ Erreur BDD :", err);
     }
@@ -66,8 +53,24 @@ app.get('/api/recherches', (req, res) => {
 
 // --- ROUTES D'ÉCRITURE (Quand l'utilisateur validera un formulaire) ---
 app.post('/api/inscription', async (req, res) => {
-    // Le code pour créer un compte ira ici
-    res.json({ message: "Compte créé (simulation)" });
+    const { prenom, nom, email, password } = req.body;
+    
+    try {
+        // Enregistrement dans la table sl_users de ta base PostgreSQL
+        const result = await pool.query(
+            'INSERT INTO sl_users (prenom, nom, email, password_hash) VALUES ($1, $2, $3, $4) RETURNING id, prenom',
+            [prenom, nom, email, password] // Idéalement, le mot de passe devra être crypté plus tard
+        );
+        
+        res.status(201).json({ message: "Compte créé", user: result.rows[0] });
+    } catch (err) {
+        console.error(err);
+        if (err.code === '23505') { // Code PostgreSQL pour une contrainte UNIQUE violée
+            res.status(400).json({ erreur: "Cet email est déjà utilisé." });
+        } else {
+            res.status(500).json({ erreur: "Erreur interne du serveur." });
+        }
+    }
 });
 
 app.post('/api/abonnements', async (req, res) => {
