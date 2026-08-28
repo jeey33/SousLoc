@@ -13,8 +13,12 @@ app.get('/', (req, res) => {
 // Ta liste d'abonnements test
 app.get('/api/abonnements', (req, res) => {
     res.json([
-        { id: 1, service: 'Apple Music', places_dispos: 1, prix_client: 4.50 },
-        { id: 2, service: 'Netflix', places_dispos: 2, prix_client: 5.00 }
+       { id: 1, service: 'Apple Music', places_dispos: 2, prix_client: 4.50 },
+        { id: 2, service: 'Netflix Premium', places_dispos: 1, prix_client: 5.00 },
+        { id: 3, service: 'Spotify', places_dispos: 3, prix_client: 3.50 },
+        { id: 4, service: 'Disney+', places_dispos: 2, prix_client: 2.99 },
+        { id: 5, service: 'PlayStation Plus', places_dispos: 1, prix_client: 6.00 },
+        { id: 6, service: 'YouTube Premium', places_dispos: 4, prix_client: 3.99 }
     ]);
 });
 
