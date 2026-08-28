@@ -39,7 +39,9 @@
         <h2>Rejoins la Coloc 👋</h2>
         <p>Crée ton compte pour partager ou squatter des abonnements.</p>
         
-        <form id="form-inscription">
+      <form id="form-inscription">
+            <input type="text" id="prenom" placeholder="Ton prénom" required>
+            <input type="text" id="nom" placeholder="Ton nom" required>
             <input type="email" id="email" placeholder="Ton adresse email" required>
             <input type="password" id="password" placeholder="Mot de passe secret" required>
             <button type="submit" class="btn">Créer mon compte</button>
@@ -49,11 +51,35 @@
     </div>
 
     <script>
-        document.getElementById('form-inscription').addEventListener('submit', function(e) {
+        // ⚠️ REMPLACE PAR TON LIEN RENDER API (-api.onrender.com)
+        const API_URL = 'https://TON_LIEN_RENDER/api/inscription';
+
+        document.getElementById('form-inscription').addEventListener('submit', async function(e) {
             e.preventDefault();
-            // ⚠️ Pense à remplacer par ton lien API Render quand on connectera la BDD
-            alert("Super ! L'inscription de " + document.getElementById('email').value + " fonctionne (simulation). On connecte ça à la base de données à la prochaine étape !");
-            window.location.href = 'index.html';
+            
+            const prenom = document.getElementById('prenom').value;
+            const nom = document.getElementById('nom').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prenom, nom, email, password })
+                });
+                
+                const data = await response.json();
+                
+                if(response.ok) {
+                    alert("Bienvenue " + data.user.prenom + " ! Ton compte est créé.");
+                    window.location.href = 'index.html';
+                } else {
+                    alert("Erreur : " + data.erreur);
+                }
+            } catch (err) {
+                alert("Impossible de contacter le serveur.");
+            }
         });
     </script>
 </body>
