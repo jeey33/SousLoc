@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SousLoc - Partage d'abonnements</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; }
+        header { text-align: center; margin-bottom: 40px; }
+        h1 { color: #ff4757; font-size: 3em; margin-bottom: 5px; }
+        .subtitle { color: #747d8c; font-size: 1.2em; }
+        #abonnements { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+        .card { background: white; border-radius: 12px; padding: 20px; width: 250px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center; border-top: 4px solid #ff4757; }
+        .service-name { font-size: 22px; font-weight: bold; color: #2f3542; margin-bottom: 10px; }
+        .places { background-color: #eccc68; color: #2f3542; padding: 5px 10px; border-radius: 20px; font-size: 14px; font-weight: bold; display: inline-block; margin-bottom: 15px; }
+        .price { font-size: 28px; color: #2ed573; font-weight: bold; margin-bottom: 20px; }
+        .btn { background-color: #ff4757; color: white; border: none; padding: 12px 20px; border-radius: 8px; width: 100%; font-size: 16px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn:hover { background-color: #ff6b81; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🔑 SousLoc</h1>
+        <div class="subtitle">Ne payez plus plein pot. Divisez l'addition.</div>
+    </header>
+
+    <!-- C'est ici que les abonnements vont s'afficher -->
+    <div id="abonnements">
+        <p>Chargement des sous-locs disponibles...</p>
+    </div>
+
+    <script>
+        // ⚠️ REMPLACE L'URL CI-DESSOUS PAR TON LIEN RENDER (ex: https://lasousloc-api-xyz.onrender.com)
+        const API_URL = 'https://TON_LIEN_RENDER/api/abonnements';
+
+        // Cette fonction va chercher les données sur ton serveur
+        fetch(API_URL)
+            .then(response => response.json())
+            .then(data => {
+                const conteneur = document.getElementById('abonnements');
+                conteneur.innerHTML = ''; // On vide le texte de chargement
+
+                // On crée une carte pour chaque abonnement trouvé
+                data.forEach(abo => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <div class="service-name">${abo.service}</div>
+                        <div class="places">${abo.places_dispos} place(s) dispo</div>
+                        <div class="price">${abo.prix_client.toFixed(2)} € <span style="font-size: 14px; color: #747d8c;">/ mois</span></div>
+                        <button class="btn" onclick="alert('Bientôt connecté à Stripe !')">Rejoindre la coloc</button>
+                    `;
+                    conteneur.appendChild(card);
+                });
+            })
+            .catch(erreur => {
+                document.getElementById('abonnements').innerHTML = "<p>Erreur de connexion au serveur.</p>";
+            });
+    </script>
+</body>
+</html>
