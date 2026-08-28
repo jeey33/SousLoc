@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SousLoc - Inscription</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #6c5ce7; --bg: #f5f6fa; --text: #2d3436; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; height: 100vh; }
+        
+        .form-container {
+            background: white; padding: 40px; border-radius: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 400px;
+            text-align: center; border-top: 6px solid var(--primary);
+        }
+        h2 { font-size: 2em; font-weight: 800; margin-bottom: 10px; color: var(--primary); }
+        p { color: #636e72; margin-bottom: 25px; font-size: 0.9em; }
+        
+        input {
+            width: 100%; padding: 15px; margin-bottom: 15px; border: 2px solid #dfe6e9;
+            border-radius: 12px; font-size: 1em; outline: none; transition: 0.3s;
+        }
+        input:focus { border-color: var(--primary); }
+        
+        .btn {
+            background: var(--primary); color: white; border: none; padding: 16px;
+            border-radius: 12px; width: 100%; font-size: 1.1em; font-weight: 600;
+            cursor: pointer; transition: 0.2s;
+        }
+        .btn:hover { background: #5a4bcf; transform: scale(1.02); }
+        .link { display: block; margin-top: 20px; color: var(--primary); text-decoration: none; font-size: 0.9em; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Rejoins la Coloc 👋</h2>
+        <p>Crée ton compte pour partager ou squatter des abonnements.</p>
+        
+        <form id="form-inscription">
+            <input type="email" id="email" placeholder="Ton adresse email" required>
+            <input type="password" id="password" placeholder="Mot de passe secret" required>
+            <button type="submit" class="btn">Créer mon compte</button>
+        </form>
+        
+        <a href="index.html" class="link">← Retour aux offres</a>
+    </div>
+
+    <script>
+        document.getElementById('form-inscription').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // ⚠️ Pense à remplacer par ton lien API Render quand on connectera la BDD
+            alert("Super ! L'inscription de " + document.getElementById('email').value + " fonctionne (simulation). On connecte ça à la base de données à la prochaine étape !");
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>
